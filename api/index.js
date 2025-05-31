@@ -14,13 +14,24 @@ app.get("/", (req, res) => {
 });
 
 // POST webhook/order-created
+const processedOrders = new Set();
 app.post("/webhook/order-created", async (req, res) => {
   const order = req.body;
+  const orderId = order.id;
 
   const customer = order.customer;
   const name = `${customer?.first_name || "Customer"}`;
-  const orderId = order.id;
   const total = order.total_price;
+
+  // check duplicate process
+  if (processedOrders.has(orderId)) {
+    console.log(
+      `Duplicate order received. Skipping WhatsApp message for Order ID: ${orderId}`
+    );
+    return;
+  }
+  processedOrders.add(orderId);
+  setTimeout(() => processedOrders.delete(orderId), 10 * 60 * 1000);
 
   const client = twilio(
     process.env.TWILIO_ACCOUNT_SID,
