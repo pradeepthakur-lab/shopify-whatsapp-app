@@ -2,6 +2,7 @@
   "name": "shopify-whatsapp-app",
   "version": "1.0.0",
   "main": "api/index.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon api/index.js"
   },
@@ -13,7 +14,8 @@
     "axios": "^1.9.0",
     "body-parser": "^2.2.0",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "twilio": "^5.7.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
