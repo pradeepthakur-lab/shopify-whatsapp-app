@@ -62,10 +62,10 @@ app.post("/webhook/order-created", async (req, res) => {
         🧾 Order ID: #${orderId} 
         📦 Items: ${item_list}
         💰 Total: $ ${total}  
-        📍 Shipping to: ${order.shipping_address1}, ${
+        📍 Shipping to: ${order.shipping_address.address1}, ${
         order.shipping_address.city
       }, ${order.shipping_address.province}
-        📅 Order Date: ${new Date(order.created_at).toLocaleDateString()}
+        📅 Order Date: ${new Date(order.created_at).toLocaleDateString("en-IN")}
 
         We'll notify you once your order is on its way.  
         If you have any questions, reply to this message.
