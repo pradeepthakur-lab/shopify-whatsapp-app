@@ -8,6 +8,12 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.status(200).json({ status: "API is running" });
+});
+
+// POST webhook/order-created
 app.post("/webhook/order-created", async (req, res) => {
   const order = req.body;
 
