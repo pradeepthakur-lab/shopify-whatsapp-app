@@ -22,6 +22,12 @@ app.post("/webhook/order-created", async (req, res) => {
   const customer = order.customer;
   const name = `${customer?.first_name || "Customer"}`;
   const total = order.total_price;
+  const phone = customer?.phone;
+
+  if (!phone) {
+    console.error(`❌ No phone number found for Order ID: ${orderId}`);
+    return;
+  }
 
   // check duplicate process
   if (processedOrders.has(orderId)) {
@@ -33,6 +39,7 @@ app.post("/webhook/order-created", async (req, res) => {
   processedOrders.add(orderId);
   setTimeout(() => processedOrders.delete(orderId), 10 * 60 * 1000);
 
+  const formattedPhone = `whatsapp:${phone.replace(/\s+/g, "")}`;
   const client = twilio(
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_AUTH_TOKEN
@@ -41,7 +48,8 @@ app.post("/webhook/order-created", async (req, res) => {
   try {
     await client.messages.create({
       from: process.env.TWILIO_WHATSAPP_FROM,
-      to: process.env.WHATSAPP_TO,
+      // to: process.env.WHATSAPP_TO,
+      to: formattedPhone,
       body: `🛒 New Order Created!\n👤 Name: ${name}\n📦 Order ID: ${orderId}\n💰 Total: $${total}`,
     });
 
