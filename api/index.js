@@ -53,7 +53,7 @@ app.post("/webhook/order-created", async (req, res) => {
       body: `🛒 New Order Created!\n👤 Name: ${name}\n📦 Order ID: ${orderId}\n💰 Total: $${total}`,
     });
 
-    console.log("WhatsApp message sent.");
+    console.log("WhatsApp message sent.", formattedPhone);
     res.sendStatus(200);
   } catch (err) {
     console.error("Error sending WhatsApp message:", err);
