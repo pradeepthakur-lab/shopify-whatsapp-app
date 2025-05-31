@@ -68,7 +68,7 @@ app.post("/webhook/order-created", async (req, res) => {
         We'll notify you once your order is on its way.  
         If you have any questions, reply to this message.
 
-        Thanks for shopping with ${store_name}! 💚
+        Thanks for shopping with Kagu Wear! 💚
        `,
     });
 
