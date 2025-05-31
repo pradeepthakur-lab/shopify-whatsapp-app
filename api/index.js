@@ -23,6 +23,9 @@ app.post("/webhook/order-created", async (req, res) => {
   const name = `${customer?.first_name || "Customer"}`;
   const total = order.total_price;
   const phone = customer?.phone;
+  const item_list = order?.line_items.map(
+    (i) => `${i.quantity}x ${i.title} (${i.variant_title}).join(', ')`
+  );
 
   if (!phone) {
     console.error(`❌ No phone number found for Order ID: ${orderId}`);
@@ -50,7 +53,23 @@ app.post("/webhook/order-created", async (req, res) => {
       from: process.env.TWILIO_WHATSAPP_FROM,
       // to: process.env.WHATSAPP_TO,
       to: formattedPhone,
-      body: `🛒 New Order Created!\n👤 Name: ${name}\n📦 Order ID: ${orderId}\n💰 Total: $${total}`,
+      // body: `🛒 New Order Created!\n👤 Name: ${name}\n📦 Order ID: ${orderId}\n💰 Total: $${total}`,
+      body: ` 
+        Hi ${name}, 👋
+
+        Thank you for your order! 🛍️
+
+        🧾 Order ID: #${orderId} 
+        📦 Items: ${item_list}
+        💰 Total: $ ${total}  
+        📍 Shipping to: ${order.shipping_address}
+        📅 Order Date: ${new Date(order.created_at).toLocaleDateString()}
+
+        We'll notify you once your order is on its way.  
+        If you have any questions, reply to this message.
+
+        Thanks for shopping with ${store_name}! 💚
+       `,
     });
 
     console.log("WhatsApp message sent.", formattedPhone);
